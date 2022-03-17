@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
 import android.opengl.Matrix
 import android.os.SystemClock
+import android.util.Log
 import com.example.grayscaleffect.texture.TextureRenderer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -18,6 +19,9 @@ import javax.microedition.khronos.opengles.GL10
  * @author Md Jahirul Islam Hridoy
  * Created on 17,March,2022
  */
+
+@Volatile
+var brightness = 1f
 class MyGLRenderer : GLSurfaceView.Renderer {
 
     private lateinit var mTexture : TextureRenderer
@@ -35,6 +39,8 @@ class MyGLRenderer : GLSurfaceView.Renderer {
      var photo : Bitmap? = null
      var photoWidth = 0
      var photoHeight = 0
+
+
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         // Set the background frame color
@@ -58,8 +64,11 @@ class MyGLRenderer : GLSurfaceView.Renderer {
     }
 
     private fun grayScaleEffect() {
+
+        Log.e(TAG, "grayScaleEffect: $brightness", )
         val factory = effectContext!!.factory
-        effect = factory.createEffect(EffectFactory.EFFECT_DOCUMENTARY)
+        effect = factory.createEffect(EffectFactory.EFFECT_BRIGHTNESS)
+        effect!!.setParameter("brightness", brightness)
         effect!!.apply(textureHandle[0], photoWidth, photoHeight, textureHandle[1])
     }
 
@@ -108,5 +117,8 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         mTexture.draw(textureHandle[1] , photo!! , scratch)
 
 
+    }
+    companion object {
+         const val TAG = "MyGLRenderer"
     }
 }

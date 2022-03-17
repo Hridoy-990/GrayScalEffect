@@ -32,6 +32,6 @@ class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
 
         requestRender()
 
-
     }
+
 }
